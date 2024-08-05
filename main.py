@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+import pandas as pd
 
 # Initialize the Flask application
 app = Flask(__name__)
@@ -14,12 +15,14 @@ def home():
 # Define a route that includes dynamic segments for station and date
 @app.route("/api/v1/<station>/<date>")
 def about(station, date):
-    # Set a static temperature value (for example purposes)
-    temperature = 23
+    filename = "data_small/TG_STAID" + str(station).zfill(6) + ".txt"
+    df = pd.read_csv(filename, skiprows=20, parse_dates=["    DATE"])
+    # Set a static temperature value
+    temperature = df.loc[df['    DATE'] == date]['   TG'].squeeze() / 10
     # Return a JSON response containing the station, date, and temperature
     return {'station': station,
             'date': date,
-            'temperature': temperature}
+            'temperature': f"{temperature}deg"}
 
     # If you want to render an about.html template instead of returning JSON, uncomment the following line:
     # return render_template("about.html")
