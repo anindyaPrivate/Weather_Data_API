@@ -38,13 +38,7 @@ This web application uses Flask to serve weather data from a collection of CSV f
     git clone https://github.com/your-username/weather-data-api.git
     cd weather-data-api
     ```
-
-2. Install the required Python packages:
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-3. Ensure the `data_small` directory contains the necessary CSV files:
+2. Ensure the `data_small` directory contains the necessary CSV files:
     ```
     data_small/
     ├── stations.txt
