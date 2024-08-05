@@ -4,12 +4,13 @@ import pandas as pd
 # Initialize the Flask application
 app = Flask(__name__)
 
-
+station = pd.read_csv("data_small/stations.txt", skiprows=17)
+station = station[['STAID', 'STANAME                                 ']]
 # Define the route for the home page
 @app.route("/")
 def home():
     # Render the home.html template when the home route is accessed
-    return render_template("home.html")
+    return render_template("home.html", data = station.to_html())
 
 
 # Define a route that includes dynamic segments for station and date
@@ -23,9 +24,6 @@ def about(station, date):
     return {'station': station,
             'date': date,
             'temperature': f"{temperature}deg"}
-
-    # If you want to render an about.html template instead of returning JSON, uncomment the following line:
-    # return render_template("about.html")
 
 
 # Check if the script is run directly (and not imported as a module)
