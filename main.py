@@ -22,10 +22,8 @@ def about(station, date):
     df = pd.read_csv(filename, skiprows=20, parse_dates=["    DATE"])
     # Set a static temperature value
     temperature = df.loc[df['    DATE'] == date]['   TG'].squeeze() / 10
-    # Return a JSON response containing the station, date, and temperature
-    return {'station': station,
-            'date': date,
-            'temperature': f"{temperature}deg"}
+    # Render the data.html template with the temperature data
+    return render_template("data.html", description=f"Data for station {station} on {date}", columns=["Station", "Date", "Temperature"], data=[[station, date, f"{temperature}°C"]])
 
 
 @app.route("/api/v1/<station>")
@@ -33,7 +31,9 @@ def all_data(station):
     filename = "data_small/TG_STAID" + str(station).zfill(6) + ".txt"
     df = pd.read_csv(filename, skiprows=20, parse_dates=["    DATE"])
     result = df.to_dict(orient="records")
-    return result
+    # Convert the result into a list of lists for rendering in the table
+    data = [[row[col] for col in df.columns] for row in result]
+    return render_template("data.html", description=f"All data for station {station}", columns=df.columns, data=data)
 
 
 @app.route("/api/v1/yearly/<station>/<year>")
@@ -42,7 +42,9 @@ def all_year_Data(station, year):
     df = pd.read_csv(filename, skiprows=20)
     df['    DATE'] = df['    DATE'].astype(str)
     result = df[df['    DATE'].str.startswith(str(year))].to_dict(orient="records")
-    return result
+    # Convert the result into a list of lists for rendering in the table
+    data = [[row[col] for col in df.columns] for row in result]
+    return render_template("data.html", description=f"Yearly data for station {station} in {year}", columns=df.columns, data=data)
 
 
 # Check if the script is run directly (and not imported as a module)
