@@ -170,7 +170,7 @@ This will display the temperature data for the specified station and date.
 Enjoy using the Weather Data API! 🌦️📊
 
 
-This `README.md` file includes properly formatted sections with code blocks and URLs that can be easily copied.
+
 
 
 
